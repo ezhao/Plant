@@ -39,6 +39,9 @@ public class PlantFragment extends Fragment {
                 setPlantState(PlantState.State.HAPPY);
                 break;
         }
+
+        PlantState parsePlantState = new PlantState(plantState, PlantState.Action.WATER);
+        parsePlantState.saveEventually();
     }
 
     public void setPlantState(PlantState.State newPlantState) {

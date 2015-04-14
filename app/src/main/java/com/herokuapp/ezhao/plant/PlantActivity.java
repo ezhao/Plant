@@ -4,12 +4,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.herokuapp.ezhao.plant.fragments.PlantFragment;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
+import bolts.Task;
 import butterknife.InjectView;
 
 
@@ -26,6 +32,18 @@ public class PlantActivity extends ActionBarActivity {
         plantFragment = new PlantFragment();
         ft.replace(R.id.flFragment, plantFragment);
         ft.commit();
+
+        ParseQuery<PlantState> parseQuery = new ParseQuery<>(PlantState.class);
+        parseQuery.orderByDescending("createdAt");
+        parseQuery.getFirstInBackground(new GetCallback<PlantState>() {
+            @Override
+            public void done(PlantState plantState, ParseException e) {
+                if (plantState != null) {
+                    // Nabbed plant state from server!
+                    plantFragment.setPlantState(plantState.getEndState());
+                }
+            }
+        });
     }
 
     @Override
@@ -46,6 +64,9 @@ public class PlantActivity extends ActionBarActivity {
         if (id == R.id.action_reset) {
             if (plantFragment != null) {
                 plantFragment.setPlantState(PlantState.State.WILTED);
+
+                PlantState parsePlantState = new PlantState(PlantState.State.WILTED, PlantState.Action.RESET);
+                parsePlantState.saveEventually();
             }
             return true;
         }
