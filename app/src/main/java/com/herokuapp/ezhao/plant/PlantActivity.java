@@ -1,19 +1,32 @@
 package com.herokuapp.ezhao.plant;
 
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+
+import com.herokuapp.ezhao.plant.fragments.PlantFragment;
+
+import butterknife.InjectView;
 
 
 public class PlantActivity extends ActionBarActivity {
+    FragmentManager fm;
+    PlantFragment plantFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant);
+        fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        plantFragment = new PlantFragment();
+        ft.replace(R.id.flFragment, plantFragment);
+        ft.commit();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
