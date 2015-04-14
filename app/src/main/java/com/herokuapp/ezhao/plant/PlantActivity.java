@@ -44,6 +44,9 @@ public class PlantActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_reset) {
+            if (plantFragment != null) {
+                plantFragment.setPlantState(PlantState.State.WILTED);
+            }
             return true;
         }
 
